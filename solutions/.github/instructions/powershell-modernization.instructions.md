@@ -1,7 +1,7 @@
 ---
 name: PowerShell modernization standards
 description: Rules for refactoring PowerShell automation scripts.
-applyTo: "legacy-scripts/**/*.ps1"
+applyTo: "**/*.ps1"
 ---
 
 # PowerShell modernization standards

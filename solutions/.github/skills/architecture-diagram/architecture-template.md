@@ -45,7 +45,7 @@ erDiagram
 
 ## Editable Draw.io diagram
 
-Link to the editable architecture diagram: [ARCHITECTURE.drawio](../../docs/ARCHITECTURE.drawio)
+Link to the editable architecture diagram: [architecture-target-slug.drawio](../../docs/architecture-target-slug.drawio)
 
 Use the Draw.io artifact for collaborative review, modernization planning, and presentation-ready architecture views.
 

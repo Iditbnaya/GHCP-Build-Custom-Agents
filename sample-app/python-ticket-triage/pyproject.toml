@@ -1,9 +1,0 @@
-[project]
-name = "python-ticket-triage-sample"
-version = "0.1.0"
-description = "Small IT helpdesk ticket triage sample for GitHub Copilot custom agent workshops."
-requires-python = ">=3.10"
-dependencies = []
-
-[tool.unittest]
-start-directory = "tests"

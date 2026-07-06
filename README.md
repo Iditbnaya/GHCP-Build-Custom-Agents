@@ -13,7 +13,7 @@ configuration files**. You describe what you want, and Copilot builds it.
 
 - What a Copilot **agent** is, the **agent types** (Local, Copilot CLI, Cloud), and when to use each.
 - How to create **custom agents, prompt files, skills, and instructions** - by *describing* them, not hand-writing Markdown.
-- How to use them to **refactor a fragile script**, **review security risks**, and to **understand and document legacy code** safely.
+- How to use them to **refactor fragile automation**, **review security risks**, and **modernize full polyglot solutions** safely.
 
 ## Before you start (5 minutes)
 
@@ -26,18 +26,24 @@ configuration files**. You describe what you want, and Copilot builds it.
 ## What's in this repo
 
 ```text
-├── .github/                              # reference customizations: agents, prompts, skills, instructions
-├── docs/legacy-order-flow.md             # legacy order-pricing flow notes
+├── .github/                              # starter customizations used during the workshop
+│   ├── agents/legacy-script-refactorer.agent.md
+│   └── prompts/refactor-legacy-script.prompt.md
 ├── legacy-as400/order_pricing.rpgle      # legacy RPG business logic
 ├── legacy-scripts/                       # fragile IT automation scripts for refactoring exercises
 │   ├── user_export.ps1
 │   ├── disk_space_report.ps1
 │   ├── new_employee_setup.ps1
 │   └── test.ps1
-├── sample-app/python-ticket-triage/      # Python IT ticket-triage sample with tests
+├── sample-app/ops-request-portal/        # legacy HTML ticketing UI + Python automation script
+├── solutions/.github/                    # completed reference solutions for participants who get stuck
 ├── image.png                             # screenshot used by the workshop guide
 └── README.md                             # this participant guide
 ```
+
+The starter `.github/` folder intentionally contains only the refactor agent and refactor prompt.
+Most agents, prompts, instructions, and skills are created during the exercises. If something does
+not work during the workshop, compare with or copy from `solutions/.github/`.
 
 ## The agent types (quick reference)
 
@@ -61,8 +67,9 @@ Three decide **where** the agent runs; the fourth decides **which engine**.
 ```text
 Create a .github/copilot-instructions.md for this repo: always plan -> approve -> implement
 -> validate -> summarize; preserve legacy behavior unless a defect is named; never hard-code
-paths, servers or secrets; least-privilege; end every answer with what changed, why safer,
-how validated, and remaining risks. Show me the file.
+paths, servers or secrets; least-privilege; ignore the solutions/ folder and all of its content
+unless I explicitly ask to use it; end every answer with what changed, why safer, how validated,
+and remaining risks. Show me the file.
 ```
 
 **You should see:** Copilot creates or updates `.github/copilot-instructions.md` and shows the
@@ -106,7 +113,7 @@ exact sequence to follow: inspect first, identify behavior and risks, propose a 
 approval**, then implement only after approval.
 
 ```text
-/refactor-legacy-script legacy-scriptsnew_employee_setup.ps1
+/refactor-legacy-script legacy-scripts/new_employee_setup.ps1
 ```
 
 **You should see:** inspect → behavior/risk summary → refactor plan → approval checkpoint → edits
@@ -176,56 +183,99 @@ gh skills install github/awesome-copilot drawio
 ```text
 Create a custom agent + skill + prompt that turn code into architecture docs with Mermaid
 diagrams and Draw.io architecture diagrams. The prompt /document-architecture should generate
-docs/ARCHITECTURE.md with a plain-English explanation, a component flowchart, a sequence diagram,
-and a linked docs/ARCHITECTURE.drawio file for an editable architecture view. Do not modify code.
+a target-specific Markdown file under docs/, such as docs/architecture-order-pricing.md for
+legacy-as400/order_pricing.rpgle or docs/architecture-ops-request-portal.md for
+sample-app/ops-request-portal/. It should include a plain-English explanation, a component
+flowchart, a sequence diagram, and a linked target-specific .drawio file such as
+docs/architecture-order-pricing.drawio. Do not use a generic name like ARCHITECTURE.md when
+the target is a specific file or folder. Do not modify code.
 ```
 
 Then run it:
 
 ```text
-/document-architecture sample-app/
+/document-architecture legacy-as400/order_pricing.rpgle
 ```
 
-**You should see:** a generated architecture document that explains the current system, includes
-Mermaid diagrams, and links to an editable Draw.io diagram.
+**You should see:** a generated architecture document with a target-specific filename, such as
+`docs/architecture-order-pricing.md`, that explains the current system, includes Mermaid diagrams,
+and links to a matching editable Draw.io diagram.
 
 **Success:** the team can understand the current code before deciding what to modernize.
 
-## Exercise 6 - Build a chained modernization prompt
+## Exercise 6 - Run the full-solution modernization workflow
 
-**Goal:** create one prompt that runs the documentation, modernization, and security review agents
-one after another: first document the current state, then modernize, then run security review,
-then document the modernization result.
+**Goal:** use everything you built on any solution folder or file: scripts, HTML, Python,
+PowerShell, legacy RPG, generated reports, and docs. One short prompt should inspect the code,
+infer behavior, suggest a refactor, create a modernization plan with ADR content, run a security
+review, wait for approval, optionally implement approved changes, validate them, and create full
+documentation with diagrams.
 
-```text
-Create a prompt file .github/prompts/document-modernize-document.prompt.md invocable as
-/document-modernize-document. It should:
-1. Run the documentation workflow first to document the current system.
-2. Hand off to the it-modernization-architect agent to create a modernization plan and wait for approval.
-3. After approval, implement only the approved modernization changes.
-4. Hand off to the Security Reviewer agent to review the implemented changes for secrets,
-   least privilege, input validation, logging, and auditability. Wait for approval before applying
-   any security fixes.
-5. Apply only approved security fixes, if any.
-6. Run the documentation workflow again and write docs/MODERNIZED-ARCHITECTURE.md describing
-   what changed, including security-review results.
-7. End with files changed, validation results, security review findings, and remaining risks.
+You can use `sample-app/ops-request-portal/` as a visible demo input. Open
+`sample-app/ops-request-portal/legacy-app.html` in a browser, then run `python legacy_ticket_bot.py`
+from that folder and open the generated `handoff-report.html`. This gives everyone a visible UI
+and a concrete automation flow, but the workflow is reusable for any target.
 
-Show me the prompt file.
-```
+For this sample, the approved implementation should include a **visible modernization of the HTML UI**,
+not only Python or report hardening. The modernized result should make the portal clearly look and
+feel newer while preserving the ticket workflow.
 
-Then test the chained prompt:
+Do not create the modernized solution by hand. It should come from the reusable prompt only after
+the agents produce a plan, ADR, and security review.
+
+First improve the reusable agents you created earlier and create the final prompt:
 
 ```text
-/document-modernize-document sample-app/
+Update the existing Legacy Script Refactorer, IT Modernization Architect, Security Reviewer,
+and Architecture Documenter agents so they support full solutions across HTML, Python,
+PowerShell, legacy RPG, generated reports, and docs. Add language-specific instructions for
+Python, HTML/JavaScript, PowerShell, and legacy code. Create .github/prompts/full-solution-modernization.prompt.md
+invocable as /full-solution-modernization. It should coordinate discovery from code, refactor
+suggestion, modernization plan, ADR, security review, approval checkpoint, approved implementation,
+validation, and mandatory final documentation for any target path. The workflow is not complete
+until it creates target-specific docs for the modernized solution, including an architecture design
+with Mermaid diagrams and an editable Draw.io diagram when available. When the target includes an HTML UI,
+the modernization options and approved implementation must include visible UI modernization
+using semantic HTML, responsive CSS, accessible controls, and safer JavaScript/DOM handling,
+while preserving current behavior. Show me the changed files.If the HTML UI still looks materially the same after implementation, treat the task as incomplete and continue improving the visible UI until the modernization is apparent to a reviewer opening the page in a browser.
 ```
 
-**You should see:** current-state documentation, a modernization plan, an approval checkpoint,
-approved implementation work, security review findings, optional approved security fixes, and a
-new modernization document.
+Then run the reusable command against any target:
 
-**Success:** one reusable command coordinates documentation, modernization, and security agents in
-a safe, reviewable sequence.
+```text
+/full-solution-modernization sample-app/ops-request-portal/
+```
+
+After the plan is complete, approve the option that includes **visible HTML UI modernization**.
+If the first implementation only updates Python or tests, ask it to continue with the approved UI modernization phase.
+If it does not create target-specific documentation and architecture design for the modernized app,
+ask it to continue with the final documentation phase before considering the workflow complete.
+
+Try it on other targets too:
+
+```text
+/full-solution-modernization legacy-scripts/
+```
+
+```text
+/full-solution-modernization legacy-as400/order_pricing.rpgle
+```
+
+**You should see:** a current-state summary, a low-risk refactor suggestion, two or three
+modernization options, ADR content, security findings, and a clear approval checkpoint before any
+source code changes are made. For `sample-app/ops-request-portal/`, after approval you should also
+see a visibly modernized HTML portal, not only Python/report changes, plus target-specific docs such as
+`docs/architecture-ops-request-portal.md`, `docs/modernization-plan-ops-request-portal.md`, and a matching
+`.drawio` architecture design when supported.
+
+When supported by your VS Code/Copilot version, use handoff or approval actions such as
+**Approve implementation**, **Revise plan**, **Run security review**, and **Generate documentation**.
+If buttons do not appear, type one of those short choices.
+
+**Success:** one reusable command coordinates refactor planning, modernization, ADR, security,
+implementation approval, validation, and architecture documentation for whatever solution the
+participant brings. For the HTML sample, success requires both a visibly modernized app and docs
+that explain the modernized architecture and validation evidence.
 
 ---
 
@@ -243,12 +293,13 @@ Create **one reusable customization** for a real scenario from your own team:
 
 - New agent not showing? Run **`Developer: Reload Window`**.
 - Agent editing without asking? Switch to **Plan** or **Request approval**.
-- Not sure how to phrase something? Peek at the **reference solutions** in `.github/`.
+- Not sure how to phrase something? Peek at the **reference solutions** in `solutions/.github/`.
 
 ## Reference solutions
 
-The `.github/` folder already contains **completed versions** of every agent, prompt, skill, and
-the instructions file. **Try building your own first** — then compare with these, or reuse them.
+The `solutions/.github/` folder contains **completed versions** of the agents, prompts, skills, and
+instruction files participants create during the workshop. **Try building your own first** — then
+compare with these, or copy a file into `.github/` if something is not working.
 
 ## Keep going after today
 

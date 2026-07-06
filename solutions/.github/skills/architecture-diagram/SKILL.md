@@ -23,7 +23,7 @@ Keep every diagram **valid** (correct Mermaid syntax or Draw.io XML) and **reada
 1. Inspect the target and identify components, responsibilities, and boundaries.
 2. Trace the main data and control flows and the external dependencies.
 3. Generate the Mermaid diagrams above that apply to this code.
-4. Generate a companion `docs/ARCHITECTURE.drawio` file when the Draw.io skill is installed.
+4. Generate a companion target-specific `.drawio` file under `docs/` when the Draw.io skill is installed, such as `docs/architecture-order-pricing.drawio`.
 5. Write the document following [architecture-template.md](./architecture-template.md), including a link to the Draw.io artifact.
 6. Explain the code in plain language — assume the reader is new to it.
 

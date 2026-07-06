@@ -20,6 +20,9 @@ dist/
 build/
 *.log
 
+# Generated workshop outputs
+sample-app/ops-request-portal/handoff-report.html
+
 # Local env / secrets — never commit these
 .env
 *.local
