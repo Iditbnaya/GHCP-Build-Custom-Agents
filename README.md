@@ -26,12 +26,17 @@ configuration files**. You describe what you want, and Copilot builds it.
 ## What's in this repo
 
 ```text
-├── legacy-scripts/user_export.ps1      # a fragile PowerShell script (you'll refactor it)
-├── legacy-scripts/disk_space_report.ps1 # another script for reusing your refactor prompt
-├── legacy-as400/order_pricing.rpgle    # legacy RPG business logic (you'll understand it)
-├── sample-app/docs/legacy-order-flow.md
-├── .github/                            # REFERENCE SOLUTIONS (agents, prompts, skills, instructions)
-└── README.md                           # this guide
+├── .github/                              # reference customizations: agents, prompts, skills, instructions
+├── docs/legacy-order-flow.md             # legacy order-pricing flow notes
+├── legacy-as400/order_pricing.rpgle      # legacy RPG business logic
+├── legacy-scripts/                       # fragile IT automation scripts for refactoring exercises
+│   ├── user_export.ps1
+│   ├── disk_space_report.ps1
+│   ├── new_employee_setup.ps1
+│   └── test.ps1
+├── sample-app/python-ticket-triage/      # Python IT ticket-triage sample with tests
+├── image.png                             # screenshot used by the workshop guide
+└── README.md                             # this participant guide
 ```
 
 ## The agent types (quick reference)
@@ -252,5 +257,3 @@ the instructions file. **Try building your own first** — then compare with the
 - **VS Code docs:** *Agent customization* → custom agents, prompt files, skills, and instructions.
 
 ---
-
-*Facilitators: see `WORKSHOP-RUNBOOK.md` for the 60-minute timing and delivery notes.*
