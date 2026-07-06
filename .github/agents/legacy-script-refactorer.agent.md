@@ -1,12 +1,19 @@
 ---
 name: Legacy Script Refactorer
 description: Safely refactor inefficient or fragile IT automation scripts while preserving behavior.
-tools: ['search/codebase', 'search/usages', 'editFiles', 'runCommands']
+tools: ['search/codebase', 'search/usages', 'edit', 'execute', 'read']
 handoffs:
+#handoffs helps guide users toward logical next steps without forcing automated follow-up work.
   - label: Create runbook
     agent: agent
     prompt: Create an operations runbook that explains the refactored script, inputs, outputs, risks, and rollback steps.
     send: false
+  - label: Review and approve changes
+    agent: agent
+    prompt: Approve the suggested refactoring changes and implement them.
+    send: false
+
+
 ---
 
 # Legacy Script Refactorer
