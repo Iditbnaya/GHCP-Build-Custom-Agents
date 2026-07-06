@@ -26,20 +26,23 @@ configuration files**. You describe what you want, and Copilot builds it.
 ## What's in this repo
 
 ```
-├── legacy-scripts/user_export.ps1      # a fragile PowerShell script (you'll refactor it)
-├── legacy-as400/order_pricing.rpgle    # legacy RPG business logic (you'll understand it)
-├── sample-app/docs/legacy-order-flow.md
-├── .github/                            # REFERENCE SOLUTIONS (agents, prompts, skills, instructions)
-└── README.md                           # this guide
+├── legacy-scripts/user_export.ps1               # a fragile PowerShell script (you'll refactor it)
+├── legacy-as400/order_pricing.rpgle             # legacy RPG business logic (you'll understand it)
+├── sample-app/docs/legacy-order-flow.md         # business-flow documentation
+├── .github/agents/                              # REFERENCE agents (IT Modernization Architect,
+│                                                #   Legacy Script Refactorer, Architecture Documenter,
+│                                                #   Security Reviewer)
+├── .github/prompts/                             # REFERENCE prompt files
+├── .github/skills/                              # REFERENCE skills
+├── .github/copilot-instructions.md              # REFERENCE repo-wide instructions
+└── README.md                                    # this guide
 ```
 
-## The four agent types (quick reference)
-
-Three decide **where** the agent runs; the fourth decides **which engine**.
+## The three agent types (quick reference)
 
 | Type | Where it runs | Best for |
 |---|---|---|
-| **Local** | In VS Code, on your open files | Interactive refactoring - you see & approve each change |
+| **Local** | In VS Code, on your open files | Interactive refactoring — you see & approve each change |
 | **Copilot CLI** | In your terminal | Ops, pipelines, `git` / `kubectl` / `terraform`, over SSH |
 | **Cloud** | In the background on GitHub | Delegated, well-scoped work → returns a pull request |
 
@@ -95,21 +98,49 @@ Create a prompt file .github/prompts/refactor-legacy-script.prompt.md invocable 
 validates. Show me the file.
 ```
 
-**You should see:** each new file created — and the **custom agent appears in the agent picker**.
+**d) A security reviewer:**
+```
+Create a custom agent at .github/agents/security-reviewer.agent.md: a "Security Reviewer"
+that reads IT scripts and code looking for hard-coded secrets, over-broad permissions,
+injection risks, and missing audit logging. Read-only: it reports findings and proposes
+fixes, it does not edit files. Show me the file.
+```
 
-## Exercise 3 - Understand legacy code before changing it *(IT Modernization Architect)*
+**e) Try the prompt file:**
 
-**Goal:** extract the business rules from RPG code — understanding first, not code changes.
+Switch back to the default agent (or the **Legacy Script Refactorer**), then type:
+```
+/refactor-legacy-script
+```
+Point it at `legacy-scripts/user_export.ps1` when prompted. The prompt file drives the
+agent to plan, wait for your approval, then apply the refactor automatically.
+
+**You should see:** each new file created — the **custom agents appear in the agent picker** after a `Developer: Reload Window`.
+
+## Exercise 3 — Understand legacy code before changing it *(IT Modernization Architect)*
+
+**Goal:** extract the business rules from RPG code — understanding first, no code changes.
+
+Switch to the **IT Modernization Architect** agent in the Chat agent picker, then paste:
 ```
 Analyze legacy-as400/order_pricing.rpgle and sample-app/docs/legacy-order-flow.md.
 Extract the business rules in plain English and create examples that prove current behavior.
 Do not modernize yet.
 ```
+
+Optional — run the **Security Reviewer** agent on the refactored PowerShell script from Exercise 1:
+```
+Review legacy-scripts/user_export.ps1 for hard-coded secrets, over-broad permissions,
+injection risks, and missing audit logging.
+```
+
 **Success:** you can explain the discount rules (item A → 15%, tier G → 10%, else → 5%) in your own words.
 
 ## Exercise 4 — *(Stretch)* Code → architecture with diagrams
 
 Build a documentation agent **and** use it, then open the result in **Preview** to see the diagrams.
+
+Switch to the default agent (or describe a new one inline), then:
 ```
 Create a custom agent + skill + prompt that turn code into architecture docs with Mermaid
 diagrams. The prompt /document-architecture should generate docs/ARCHITECTURE.md with a
