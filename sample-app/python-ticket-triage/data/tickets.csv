@@ -1,0 +1,6 @@
+ticket_id,title,description,service,requester,vip
+1001,Payroll portal unavailable,Users cannot open the payroll portal and payroll approvals are blocked,payroll,finance.manager@example.com,true
+1002,VPN intermittent,Remote users report intermittent VPN drops during meetings,network,field.tech@example.com,false
+1003,Password reset request,New hire cannot access email after password reset,identity,new.hire@example.com,false
+1004,Backup job failed,Daily backup failed for the file share used by operations,backup,ops.lead@example.com,true
+1005,Laptop fan noise,Laptop fan is loud after recent update,laptop,employee@example.com,false
